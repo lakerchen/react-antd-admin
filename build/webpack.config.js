@@ -23,10 +23,10 @@ webpackConfig.entry =  {
 };
 
 webpackConfig.output = {
-    path: resolve('dist'), //打包后的文件存放的地方
-    publicPath: '/',
-    filename: '[name]-[hash:5].js', //打包后输出文件的文件名
-    chunkFilename: 'assets/[name].[chunkhash:5].chunk.js'
+  path: resolve('dist'), //打包后的文件存放的地方
+  publicPath: '/',
+  filename: '[name]-[hash:5].js', //打包后输出文件的文件名
+  chunkFilename: 'assets/[name].[chunkhash:5].chunk.js'
 }
 
 webpackConfig.module = {
@@ -85,6 +85,7 @@ if(env === 'production'){
 
 webpackConfig.resolve = {
   alias: {
+    common: path.resolve(__dirname, '../src/common/'), 
     containers: path.resolve(__dirname, '../src/containers/'),    
     components: path.resolve(__dirname, '../src/components/'),    
     constants: path.resolve(__dirname, '../src/constants/'),    

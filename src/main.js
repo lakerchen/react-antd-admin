@@ -1,24 +1,39 @@
 import { Router, Route, hashHistory, IndexRoute, Redirect ,useRouterHistory} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import routes from 'routes';
+import createStore from './store/createStore';
+import createHistory from 'history/createHashHistory';
 
 const mountNode = document.getElementById('root');
+// const browserHistory = useRouterHistory(createHashHistory)({
+//   basename: ''
+// });
+// const store = createStore(window.__INITIAL_STATE__, hashHistory);
 
-let render = (key = null) => {
+const history = createHistory();
+const store = createStore(window.__INITIAL_STATE__,history);
 
-//用这种方式配置路由，webpack打包不能提取公共模块，先放弃治疗，找到原因再改进
-// const routes = require('./routes/index').default(store)
-// const App = (
-//   <Provider store={store}>
-//     <Router history={history} children={routes} key={key} />
-//   </Provider>
-// )
+// const history = syncHistoryWithStore(browserHistory, store, {
+//   selectLocationState: (state) => state.router
+// });
 
-  const App = (
-    <div>Hello world</div>
-  )
+class App extends React.Component {
+  componentDidMount() {
 
-  ReactDOM.render(App, mountNode)
+  }
+
+  render() {
+    console.log('routes',routes)
+    return (
+      <Provider store={store}>
+        <div style={{ height: '100%' }}>
+          <Router children={routes} history={history}/>
+        </div>
+      </Provider>
+    )
+  }
 }
 
-render()
+ReactDOM.render(<App/>, mountNode)
