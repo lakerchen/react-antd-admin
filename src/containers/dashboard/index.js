@@ -8,4 +8,6 @@ const mapStateToProps = (state) => ({
   // core: state.core
 })
 
+console.log('Dashboard in container',Dashboard)
+
 export default connect(mapStateToProps, mapActionCreators)(Dashboard);

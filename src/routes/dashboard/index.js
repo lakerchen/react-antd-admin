@@ -24,10 +24,10 @@ console.log('DashBoard',DashBoard)
 
 const routes = {
   path: 'dashboard',
-  // component: DashBoard,
-  getComponent(location, callback){
-    callback(null,DashBoard);
-  },
+  component: DashBoard,
+  // getComponent(location, callback){
+  //   callback(null,DashBoard);
+  // },
   // getChildRoutes (location, next) {
   //   next(null,[about,order]);
   // },

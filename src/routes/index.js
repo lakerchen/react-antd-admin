@@ -19,7 +19,10 @@ const routes = {
   childRoutes : [
     login,
     dashboard,
-  ]
+  ],
+  onError(error){
+    console.log('/ error',error)
+  }
 }
 
 export default routes;

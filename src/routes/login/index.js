@@ -1,5 +1,5 @@
 import React from 'react';
-import loadLogin from 'containers/login';
+import loadLogin from 'bundle-loader?lazy!containers/login';
 import Bundle from 'common/Bundle';
 
 // const Login = (props) => (
@@ -22,9 +22,12 @@ console.log('Login',Login)
 
 const routes = {
   path: 'login',
-  // component: Login,
-  getComponent(location, callback){
-    callback(null,Login);
+  component: Login,
+  // getComponent(location, callback){
+  //   callback(null,Login);
+  // },
+  onError(error){
+    console.log('/login',error)
   },
 }
 
