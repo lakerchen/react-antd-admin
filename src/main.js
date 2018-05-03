@@ -1,38 +1,37 @@
-import {  hashHistory, IndexRoute, Redirect ,useRouterHistory} from 'react-router';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Switch
-} from 'react-router-dom';
-import { connect } from 'react-redux';
+import 'promise-polyfill';
+import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-// import routes from 'routes';
+import { connect, Provider } from 'react-redux';
+import { LocaleProvider } from 'antd';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+import { Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { syncHistoryWithStore } from 'react-router-redux';
 import createStore from './store/createStore';
-import createHistory from 'history/createHashHistory';
 import Bundle from 'common/Bundle';
+import browserHistory from 'utils/history';
+import LayoutContainer from 'containers/layout';
 
-// import Layout from 'containers/layout';
+// import login from 'bundle-loader?lazy!containers/login';
+// import dashBoard from 'bundle-loader?lazy!containers/dashboard';
+// import about from 'bundle-loader?lazy!containers/dashboard/about';
+// import order from 'bundle-loader?lazy!containers/dashboard/order';
 
-import login from 'bundle-loader?lazy!containers/login';
-import dashBoard from 'bundle-loader?lazy!containers/dashboard';
-import about from 'bundle-loader?lazy!containers/dashboard/about';
-import order from 'bundle-loader?lazy!containers/dashboard/order';
+import Login from 'containers/login';
+import DashBoard from 'containers/dashboard';
+// import About from 'containers/dashboard/about';
+// import Order from 'containers/dashboard/order';
+
+import Home from 'routes/home/homeContainer';
+// import Login from 'routes/login/loginContainer';
+// import DashBoard from 'routes/dashboard/dashboardContainer';
+import About from 'routes/dashboard/about/aboutContainer';
+import Order from 'routes/dashboard/order/orderContainer';
+import Notfound from 'routes/notfound/notfoundContainer';
 
 const mountNode = document.getElementById('root');
-// const browserHistory = useRouterHistory(createHashHistory)({
-//   basename: ''
-// });
-// const store = createStore(window.__INITIAL_STATE__, hashHistory);
 
-const history = createHistory();
-const store = createStore(window.__INITIAL_STATE__,history);
-
-// const history = syncHistoryWithStore(browserHistory, store, {
-//   selectLocationState: (state) => state.router
-// });
+const store = createStore(window.__INITIAL_STATE__,browserHistory);
 
 const loader = (loadComp, props) => (props) => (
   <Bundle load={loadComp}>
@@ -43,67 +42,28 @@ const loader = (loadComp, props) => (props) => (
 // const Login = loader(login);
 // const Dashboard = loader(dashBoard);
 
-class Layout extends React.Component {
-  constructor(props){
-    super(props);
-  }
 
-  render () {
-    // console.log('this.props', this.props)
-    return (
-      <div>
-        <div id="admin-menu">
-          <h1>App</h1>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/dashboard">Dashboard</Link></li>
-            <li><Link to="/dashboard/about">About</Link></li>
-            <li><Link to="/dashboard/order">Order</Link></li>
-          </ul>
-        </div>
-        {this.props.children}
-      </div>
-    )
-  }
-}
+const Base = () => (
+  <LayoutContainer>
+    <Switch>
+      <Route exact path='/' render={() => < DashBoard />} />
+      <Route path="/login" component={Login}/>
+      <Route path="/dashboard" component={DashBoard}/>
+    </Switch>
+  </LayoutContainer>
+);
 
-const mapActionCreators = {}
+const App = (
+  <LocaleProvider locale={zhCN}>
+    <Provider store={store}>
+      <Router history={browserHistory}>
+        <Switch>
+          <Route path="/" component={Base}/>
+          <Route path="/notfound" component={Notfound}/>
+        </Switch>
+      </Router>
+    </Provider>
+  </LocaleProvider>
+);
 
-const mapStateToProps = (state) => ({
-  // core: state.core
-})
-
-console.log('layout in container',Layout)
-
-const LayoutContainer = connect(mapStateToProps, mapActionCreators)(Layout)
-
-
-class App extends React.Component {
-  componentDidMount() {
-
-  }
-
-  render() {
-    console.log('Layout',Layout)
-    console.log('login',loader(login))
-    return (
-      <Provider store={store}>
-        <Router history={history}>
-          <LayoutContainer>
-            <Switch>
-              <Route exact path="/" component={loader(login)}/>
-              <Route path="/login" component={loader(login)}/>
-              <Route path="/dashboard" component={loader(dashBoard)}>
-                <Route path="about" component={loader(about)}/>
-                <Route path="order" component={loader(order)}/>
-              </Route>
-            </Switch>
-          </LayoutContainer>
-        </Router>
-      </Provider>
-    )
-  }
-}
-
-ReactDOM.render(<App/>, mountNode)
+ReactDOM.render(App, mountNode)

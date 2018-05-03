@@ -21,7 +21,7 @@ export default (initialState = {}, history) => {
 
   const store = createStore(rootReducer(), initialState, middleware)
 
-  store.asyncReducers = {}
+  // store.asyncReducers = {}
 
   return store;
 }

@@ -26,32 +26,80 @@ webpackConfig.output = {
   path: resolve('dist'), //打包后的文件存放的地方
   publicPath: '/',
   filename: '[name]-[hash:5].js', //打包后输出文件的文件名
-  chunkFilename: 'assets/[name].[chunkhash:5].chunk.js'
+  chunkFilename: 'assets/[name].[chunkhash:5].chunk.js',
+  sourceMapFilename: "sourcemaps/[file].map",
 }
 
 webpackConfig.module = {
   rules: [
-    {
-      test: /\.js$/, 
-      exclude: /node_modules/,
-      use : {
-        loader: 'babel-loader', 
-        options: {
-          presets: ['es2015', 'stage-2'],
-        }
-      }
-    }, 
+    { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
   ]
 }
 
 webpackConfig.module.rules.push(
-  { test: /\.woff(\?.*)?$/,  use: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff' },
-  { test: /\.woff2(\?.*)?$/, use: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2' },
-  { test: /\.otf(\?.*)?$/, use: 'file-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=font/opentype' },
-  { test: /\.ttf(\?.*)?$/, use: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/octet-stream' },
-  { test: /\.eot(\?.*)?$/, use: 'file-loader?prefix=fonts/&name=[path][name].[ext]' },
-  { test: /\.svg(\?.*)?$/, use: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml' },
-  { test: /\.(png|jpg|gif)$/, use: 'url-loader?limit=8192&name=assets/images/[hash:8].[name].[ext]' }
+  {
+    test: /\.woff(\?.*)?$/,
+    use: [
+      {
+        loader: 'url-loader',
+        options: { prefix: 'fonts/', name: '[path][name].[ext]', limit: 10000, mimetype: 'application/font-woff' }
+      }
+    ]
+  },
+  {
+    test: /\.woff2(\?.*)?$/,
+    use: [
+      {
+        loader: 'url-loader',
+        options: { prefix: 'fonts/', name: '[path][name].[ext]', limit: 10000, mimetype: 'application/font-woff2' }
+      }
+    ]
+  },
+  {
+    test: /\.otf(\?.*)?$/,
+    use: [
+      {
+        loader: 'file-loader',
+        options: { prefix: 'fonts/', name: '[path][name].[ext]', limit: 10000, mimetype: 'font/opentype' }
+      }
+    ]
+  },
+  {
+    test: /\.ttf(\?.*)?$/,
+    use: [
+      {
+        loader: 'url-loader',
+        options: { prefix: 'fonts/', name: '[path][name].[ext]', limit: 10000, mimetype: 'application/octet-stream' }
+      }
+    ]
+  },
+  {
+    test: /\.eot(\?.*)?$/,
+    use: [
+      {
+        loader: 'file-loader',
+        options: { prefix: 'fonts/', name: '[path][name].[ext]' }
+      }
+    ]
+  },
+  {
+    test: /\.svg(\?.*)?$/,
+    use: [
+      {
+        loader: 'url-loader',
+        options: { prefix: 'fonts/', name: '[path][name].[ext]', limit: 10000, mimetype: 'image/svg+xml' }
+      }
+    ]
+  },
+  {
+    test: /\.(png|jpg|gif)$/,
+    use: [
+      {
+        loader: 'url-loader',
+        options: { name: 'assets/images/[hash:8].[name].[ext]', limit: 8192 }
+      }
+    ]
+  }
 )
 
 //set NODE_ENV=production&&babel-node bin/compile中，&&前面不能有空格，否则env === 'production'为false
@@ -60,8 +108,8 @@ if(env === 'production'){
   webpackConfig.module.rules.push({
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
-      fallback: 'style-loader', 
-      use: ['css-loader', 'postcss-loader']
+      fallback: 'style-loader',
+      use: ['css-loader','postcss-loader']
     })
   })
 
@@ -69,17 +117,40 @@ if(env === 'production'){
     test: /\.less$/,
     use: ExtractTextPlugin.extract({
       fallback: 'style-loader',
-      use: ['css-loader', 'postcss-loader', `less-loader?{modifyVars:${JSON.stringify(theme)}}`]
+      use: [
+        { loader: 'css-loader' },
+        { loader: 'postcss-loader' },
+        {
+          loader: 'less-loader',
+          options: {
+            // 此处调用的是less.modifyVars
+            // 在webpack1版本中的写法：
+            // loader: ExtractTextPlugin.extract("style", "css!postcss!less-loader?" +`{"modifyVars":${JSON.stringify(theme)}}`)
+            modifyVars: theme
+          }
+        }
+      ]
     })
   })
-}else{
+} else {
   webpackConfig.module.rules.push({
     test: /\.css$/,
     use: ['style-loader','css-loader','postcss-loader']
   })
+
   webpackConfig.module.rules.push({
     test: /\.less$/,
-    use: ['css-loader', 'postcss-loader', `less-loader?{modifyVars:${JSON.stringify(theme)}}`]
+    use: [
+      { loader: 'style-loader' },
+      { loader: 'css-loader' },
+      { loader: 'postcss-loader' },
+      {
+        loader: 'less-loader',
+        options: {
+          modifyVars: theme
+        }
+      }
+    ]
   })
 }
 
@@ -106,9 +177,7 @@ if(env !== 'production'){
     contentBase: './dist', //本地服务器所加载的页面所在的目录
     port: 8989,
     historyApiFallback: true, //不跳转
-    hot: true, //实时刷新
-    https : false,
-    noInfo : true,
+    inline: true, //实时刷新
     //代理到json-server的端口，模拟后端接口
     proxy: {
       '/api/*': {
@@ -125,24 +194,6 @@ if(env !== 'production'){
 
 webpackConfig.plugins = [
   new webpack.HotModuleReplacementPlugin(),
-  new webpack.LoaderOptionsPlugin({
-    options: {
-      postcss: [
-        require('autoprefixer')//调用autoprefixer插件
-      ]               
-    }
-  }), 
-  new webpack.LoaderOptionsPlugin({
-    options: {
-      babel : {
-        presets: ['es2015', 'stage-0', 'react'],
-        plugins: ['transform-runtime', ['import', {
-          libraryName: 'antd',
-          style: true
-        }]]
-      }             
-    }
-  }), 
   //see => https://github.com/webpack/docs/wiki/list-of-plugins#commonschunkplugin
   new CommonsChunkPlugin({
     name: 'assets/main',
@@ -152,11 +203,12 @@ webpackConfig.plugins = [
   }),
   //see => https://github.com/webpack/docs/wiki/list-of-plugins#uglifyjsplugin
   new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      drop_console: true,
-      compress: {
-        warnings: false,   //把打包的时候控制台的很多warning忽略掉，免得刷屏
-      },
+    minimize: true,
+    drop_console: env === 'production',
+    // sourceMap: true
+    // compress: {
+    //   warnings: false,   // webpack3 已经默认为false
+    // },
   }),
   //see => https://github.com/webpack/docs/wiki/list-of-plugins#htmlwebpackplugin-
   new HtmlwebpackPlugin({
@@ -170,13 +222,14 @@ webpackConfig.plugins = [
     __DEV__: env === 'development',
     __TEST__: env === 'test',
     __PRD__ : env === 'production'
-  }),
+  })
 ];
 
 if(env === 'production'){
   //see => https://www.npmjs.com/package/extract-text-webpack-plugin
   webpackConfig.plugins.push(
-    new ExtractTextPlugin('[name]-[hash:5].css', {
+    new ExtractTextPlugin({
+      filename: '[name]-[hash:5].css',
       allChunks : true
     })
   )
@@ -186,7 +239,7 @@ if(env === 'production'){
       __TEST__: env === 'test',
       __PRD__ : env === 'production',
       'process.env': {
-         NODE_ENV: JSON.stringify("production") 
+         NODE_ENV: JSON.stringify("production")
       }
     })
   )
@@ -197,5 +250,7 @@ if(env === 'production'){
     }])
   )
 }
+
+// webpackConfig.devtool = 'source-map';
 
 module.exports = webpackConfig;

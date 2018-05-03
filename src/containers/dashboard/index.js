@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
-import Dashboard from 'components/dashboard';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import loadComponent from 'common/loader';
 
-const mapActionCreators = {}
+const mapActionCreators = {
+
+}
 
 const mapStateToProps = (state) => ({
-  // core: state.core
+  core: state.core
 })
 
-console.log('Dashboard in container',Dashboard)
+const Dashboard = loadComponent(() => import('components/dashboard'));
 
-export default connect(mapStateToProps, mapActionCreators)(Dashboard);
+export default connect(mapStateToProps, mapActionCreators)(withRouter(Dashboard))
