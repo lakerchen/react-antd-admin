@@ -43,23 +43,32 @@ const loader = (loadComp, props) => (props) => (
 // const Dashboard = loader(dashBoard);
 
 
-const Base = () => (
+const DashboardLayout = () => (
   <LayoutContainer>
     <Switch>
-      <Route exact path='/' render={() => < DashBoard />} />
-      <Route path="/login" component={Login}/>
-      <Route path="/dashboard" component={DashBoard}/>
+      <Route exact path='/' component={DashBoard} />
+      {/*<Route path="/dashboard" component={DashBoard}/>*/}
     </Switch>
   </LayoutContainer>
 );
+
+const BaseLayout = () => {
+  <LayoutContainer>
+    <Switch>
+      <Route path="/login" component={Login}/>
+      <Route path="/notfound" component={Notfound}/>
+    </Switch>
+  </LayoutContainer>
+}
 
 const App = (
   <LocaleProvider locale={zhCN}>
     <Provider store={store}>
       <Router history={browserHistory}>
         <Switch>
-          <Route path="/" component={Base}/>
-          <Route path="/notfound" component={Notfound}/>
+          <Route exact path="/" component={DashboardLayout}/>
+          <Route path="/dashboard" component={DashboardLayout}/>
+          <Route path="*" component={BaseLayout}/>
         </Switch>
       </Router>
     </Provider>
