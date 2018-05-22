@@ -12,4 +12,4 @@ const mapStateToProps = (state) => ({
 
 const Dashboard = loadComponent(() => import('components/dashboard'));
 
-export default connect(mapStateToProps, mapActionCreators)(withRouter(Dashboard))
+export default withRouter(connect(mapStateToProps, mapActionCreators)(Dashboard))

@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-// import Dashboard from 'components/dashboard';
 import { withRouter } from 'react-router';
 import loadComponent from 'common/loader';
 
@@ -11,6 +10,6 @@ const mapStateToProps = (state) => ({
   core: state.core
 })
 
-const Dashboard = loadComponent(() => import('components/dashboard'));
+const Home = loadComponent(() => import('components/dashboard/home'));
 
-export default connect(mapStateToProps, mapActionCreators)(withRouter(Dashboard))
+export default withRouter(connect(mapStateToProps, mapActionCreators)(Home))

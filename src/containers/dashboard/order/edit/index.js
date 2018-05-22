@@ -12,4 +12,4 @@ const mapStateToProps = (state) => ({
 
 const EditOrder = loadComponent(() => import('components/dashboard/order/edit'));
 
-export default connect(mapStateToProps, mapActionCreators)(withRouter(EditOrder))
+export default withRouter(connect(mapStateToProps, mapActionCreators)(EditOrder))

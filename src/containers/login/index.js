@@ -12,4 +12,4 @@ const mapStateToProps = (state) => ({
 
 const Login = loadComponent(() => import('components/login'));
 
-export default connect(mapStateToProps, mapActionCreators)(withRouter(Login))
+export default withRouter(connect(mapStateToProps, mapActionCreators)(Login))

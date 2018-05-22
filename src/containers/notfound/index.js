@@ -10,6 +10,6 @@ const mapStateToProps = (state) => ({
   core: state.core
 })
 
-const Login = loadComponent(() => import('components/login'));
+const Notfound = loadComponent(() => import('components/notfound'));
 
-export default connect(mapStateToProps, mapActionCreators)(withRouter(Login))
+export default withRouter(connect(mapStateToProps, mapActionCreators)(Notfound))

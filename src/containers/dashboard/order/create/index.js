@@ -12,4 +12,4 @@ const mapStateToProps = (state) => ({
 
 const CreateOrder = loadComponent(() => import('components/dashboard/order/create'));
 
-export default connect(mapStateToProps, mapActionCreators)(withRouter(CreateOrder))
+export default withRouter(connect(mapStateToProps, mapActionCreators)(CreateOrder))
