@@ -13,10 +13,10 @@ import browserHistory from 'utils/history';
 import Login from 'containers/login';
 import DashBoard from 'containers/dashboard';
 import Notfound from 'containers/notfound';
-
+import store from './store';
 const mountNode = document.getElementById('root');
 
-const store = createStore(window.__INITIAL_STATE__,browserHistory);
+// const store = createStore(window.__INITIAL_STATE__,browserHistory);
 
 const App = (
   <LocaleProvider locale={zhCN}>
@@ -34,3 +34,12 @@ const App = (
 );
 
 ReactDOM.render(App, mountNode)
+
+//     Login
+//     Dashboard
+//         home
+//         order
+//             create
+//             edit
+//         about
+//     Notfound

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import loadComponent from 'common/loader';
+import loader from 'common/loader';
 
 const mapActionCreators = {
 
@@ -10,6 +10,6 @@ const mapStateToProps = (state) => ({
   core: state.core
 })
 
-const CreateOrder = loadComponent(() => import('components/dashboard/order/create'));
+const CreateOrder = loader(() => import('components/dashboard/order/create'));
 
 export default withRouter(connect(mapStateToProps, mapActionCreators)(CreateOrder))

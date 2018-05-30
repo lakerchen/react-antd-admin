@@ -5,6 +5,7 @@ import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import CreateOrder from 'containers/dashboard/order/create';
 import EditOrder from 'containers/dashboard/order/edit';
 import Home from 'containers/dashboard/home';
+import Order from 'containers/dashboard/order';
 import NotFound from 'containers/notfound';
 import About from 'containers/dashboard/about';
 
@@ -51,6 +52,10 @@ export default class LayoutView extends React.Component {
     collapsed: false,
   };
 
+  componentDidMount () {
+    document.getElementById('root').setAttribute('style', '');
+  }
+ 
   onCollapse = (collapsed) => {
     this.setState({ collapsed });
   }
@@ -74,9 +79,10 @@ export default class LayoutView extends React.Component {
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb>
             <Switch>
-              <Route path="/" exact component={Home}/>
+              <Route path="/dashboard/" exact component={Home}/>
+              <Route path="/dashboard/order" exact component={Order}/>
               <Route path="/dashboard/order/create" component={CreateOrder}/>
-              <Route path="/dashboard/order/edit" component={EditOrder}/>
+              <Route path="/dashboard/order/edit/:orderno" component={EditOrder}/>
               <Route path="/dashboard/about" component={About}/>
               <Route component={NotFound}/>
             </Switch>

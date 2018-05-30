@@ -3,18 +3,16 @@ const menuList = [
         path: '/dashboard/order',
         label: '订单列表',
         icon: 'desktop',
-        subMenus: [
-            {
-                path: '/dashboard/order/create',
-                label: '创建订单',
-                icon: 'desktop',
-            },
-            {
-                path: '/dashboard/order/edit',
-                label: '编辑订单',
-                icon: 'desktop',
-            }
-        ]
+    },
+    {
+        path: '/dashboard/order/edit/0001',
+        label: '编辑订单',
+        icon: 'desktop',
+    },
+    {
+        path: '/dashboard/order/create',
+        label: '新建订单',
+        icon: 'desktop',
     },
     {
         path: '/login',
