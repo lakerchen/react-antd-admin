@@ -175,13 +175,13 @@ if(env !== 'production'){
   webpackConfig.devServer = {
     host: '0.0.0.0', //加上这个配置才能让别人访问你的本地服务器
     contentBase: './dist', //本地服务器所加载的页面所在的目录
-    port: 8989,
+    port: 8000,
     historyApiFallback: true, //不跳转
     inline: true, //实时刷新
     //代理到json-server的端口，模拟后端接口
     proxy: {
       '/api/*': {
-        target: 'http://localhost:8787',
+        target: 'http://localhost:8001',
         secure: false,
         changeOrigin: true,
         pathRewrite: {

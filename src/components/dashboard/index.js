@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Divider, Modal } from 'antd';
 import CreateOrder from 'containers/dashboard/order/create';
 import EditOrder from 'containers/dashboard/order/edit';
 import Home from 'containers/dashboard/home';
@@ -60,7 +60,21 @@ export default class LayoutView extends React.Component {
     this.setState({ collapsed });
   }
 
+  logout = () => {
+    Modal.confirm({
+      content: '您确认要退出登录吗？',
+      onOk: () => {
+        this.props.logout().then(res => {
+          if (/_SUCCESS$/.test(res.type)) {
+            this.props.history.push('/login');
+          }
+        });
+      }
+     });
+  }
+ 
   render() {
+    const { USER = {} } = this.props.core;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sider
@@ -72,7 +86,11 @@ export default class LayoutView extends React.Component {
           {renderMenuList(menuList)}
         </Sider>
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
+          <Header className="admin-header">
+            <div className="admin-profile">
+              欢迎您：{USER.userName} <Divider type="vertical" /> <a href="javascript:void(0)" onClick={this.logout}>退出</a>
+            </div>
+          </Header>
           <Content style={{ margin: '0 16px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>

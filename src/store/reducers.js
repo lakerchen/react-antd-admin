@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 import { routerReducer as router } from 'react-router-redux';
+import core from './core';
 
 export const appReducers = (asyncReducers) => {
   return combineReducers({
+    core,
     router,
     ...asyncReducers,
   });

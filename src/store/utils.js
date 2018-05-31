@@ -1,3 +1,5 @@
+import { FETCH } from 'middleware/constants';
+
 export function createHandlers (...ACTION_TYPES) {
     return ACTION_TYPES.reduce((ACTION_HANDLERS, param) => {
       if (typeof param === 'string') {
@@ -56,4 +58,15 @@ export function createHandlers (...ACTION_TYPES) {
         payload: value
       }
     }
+  }
+
+  export function createFetchAction (actionType, url) {
+    return (value, options={}) => (dispatch, getState) => dispatch({
+      [FETCH]: {
+        type: actionType,
+        url: url,
+        payload: value || {},
+        options : options
+      }
+    })
   }
