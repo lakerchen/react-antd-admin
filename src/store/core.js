@@ -10,18 +10,18 @@ export const endLoading = createAction(END_LOADING)
 export const login = createFetchAction(LOGIN, '/login')
 export const forgetPsw = createFetchAction(FORGET_PSW, '/forgetPsw')
 export const logout = createFetchAction(LOGOUT, '/logout')
-export const queryMenu = createFetchAction(QUERY_MENU, '/queryMenu')
+export const queryMenu = createFetchAction(QUERY_MENU, '/menu')
 export const queryDate = createFetchAction(QUERY_SYSDATE, '/queryDate')
 export const modifyPwd = createFetchAction(PSW_MODIFY,'/modifyPwd')
 
 const actionHandlers = {
   [QUERY_MENU]: (state, payload) => ({
-      ...state,
-      MENU: payload,
+    ...state,
+    MENU: payload.model.menuList,
   }),
   [UPDATE_AUTH]: (state, payload) => ({
-      ...state,
-      loggedIn: payload,
+    ...state,
+    loggedIn: payload,
   }),
   [LOGIN]: (state, payload) => {
     const userinfo = {
@@ -80,10 +80,10 @@ const actionHandlers = {
 }
 
 export default createReducer({
-    isFetching: false,
-    loggedIn: auth.loggedIn(),
-    sysDateL: '',
-    sysDate: '',
-    USER: auth.getSelf() || {},
-    loading: 0
+  isFetching: false,
+  loggedIn: auth.loggedIn(),
+  sysDateL: '',
+  sysDate: '',
+  USER: auth.getSelf() || {},
+  loading: 0
 }, createHandlers(actionHandlers))

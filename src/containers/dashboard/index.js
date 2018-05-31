@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import loader from 'common/loader';
-import { logout } from 'store/core';
+import { logout, queryMenu } from 'store/core';
 
 const mapActionCreators = {
-  logout
+  logout,
+  queryMenu,
 }
 
 const mapStateToProps = (state) => ({

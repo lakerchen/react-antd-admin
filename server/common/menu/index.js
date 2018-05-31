@@ -6,9 +6,30 @@ module.exports = function (req, res){
         "model": {
             "menuList": [
                 {
-                    path: '/dashboard/order',
-                    label: '订单列表',
-                    icon: 'desktop',
+                    path: '/dashboard/',
+                    label: '首页',
+                    icon: 'home',
+                },
+                {
+                    label: '订单',
+                    icon: 'table',
+                    subMenus: [
+                        {
+                            path: '/dashboard/order',
+                            label: '订单列表',
+                            icon: 'file-text',
+                        },
+                        {
+                            path: '/dashboard/create',
+                            label: '订单录入',
+                            icon: 'file-add',
+                        }
+                    ]
+                },
+                {
+                    path: '/dashboard/product',
+                    label: '产品列表',
+                    icon: 'file-text',
                 },
                 {
                     path: '/dashboard/order/edit/0001',
@@ -33,12 +54,12 @@ module.exports = function (req, res){
                 {
                     path: '/dashboard/echarts',
                     label: '测试Echarts',
-                    icon: 'desktop',
+                    icon: 'area-chart',
                 },
                 {
                     path: '/dashboard/richtext',
                     label: '测试富文本编辑',
-                    icon: 'desktop',
+                    icon: 'book',
                 }, 
                 {
                     path: '/dashboard/about',

@@ -8,8 +8,6 @@ import Home from 'containers/dashboard/home';
 import Order from 'containers/dashboard/order';
 import NotFound from 'containers/notfound';
 import About from 'containers/dashboard/about';
-
-import menuList from 'constants/menuList';
 import { guid } from 'utils/common';
 
 import './style.less';
@@ -21,7 +19,7 @@ const renderMenuList = (menuList, keyPrefix = '0') => {
   return (
     <Menu theme="dark" defaultSelectedKeys={['0-0']} mode="inline">
       {
-        menuList.map((item, index) => {
+        (Array.isArray(menuList) ? menuList : []).map((item, index) => {
           if (!Array.isArray(item.subMenus)) {
             return (
               <Menu.Item key={`${keyPrefix}-${index}`}>
@@ -54,6 +52,9 @@ export default class LayoutView extends React.Component {
 
   componentDidMount () {
     document.getElementById('root').setAttribute('style', '');
+    this.props.queryMenu().then(res => {
+      console.log('res',res)
+    })
   }
  
   onCollapse = (collapsed) => {
@@ -74,7 +75,7 @@ export default class LayoutView extends React.Component {
   }
  
   render() {
-    const { USER = {} } = this.props.core;
+    const { USER = {}, MENU = [] } = this.props.core;
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sider
@@ -83,7 +84,7 @@ export default class LayoutView extends React.Component {
           onCollapse={this.onCollapse}
         >
           <div className="admin-logo" />
-          {renderMenuList(menuList)}
+          {renderMenuList(MENU)}
         </Sider>
         <Layout>
           <Header className="admin-header">
@@ -106,7 +107,7 @@ export default class LayoutView extends React.Component {
             </Switch>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            Ant Design ©2016 Created by Ant UED
+            版权所有 ©2018 深圳市钱很多有限公司
           </Footer>
         </Layout>
       </Layout>

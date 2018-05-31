@@ -1,5 +1,4 @@
 module.exports = function (req, res){
-    console.log('req.body',req.body)
     if (req.body.userName === 'admin' && req.body.password === 'admin') {
         res.json(200, {
             "model": {

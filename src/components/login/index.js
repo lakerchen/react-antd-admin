@@ -17,7 +17,6 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {  
         this.props.login(values).then(res => {
-          console.log('res',res)
           if (/_SUCCESS$/.test(res.type)) {
             this.props.history.push('/dashboard');
           }
